@@ -294,4 +294,4 @@ client.on('message', message => {
 // You really don't want your token here since your repl's code
 // is publically available. We'll take advantage of a Repl.it 
 // feature to hide the token we got earlier. 
-client.login(process.env.DISCORD_TOKEN);# TimerBot
+client.login(process.env.DISCORD_TOKEN);
