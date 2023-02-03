@@ -1,5 +1,6 @@
 const { ShardingManager } = require('discord.js');
-const token = process.env.DISCORD_TOKEN;
+const config = require('./config.json');
+const token = config.token;
 
 
 
