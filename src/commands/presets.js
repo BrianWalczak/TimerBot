@@ -3,24 +3,24 @@ const loki = require('lokijs');
 var db = new loki('presets.db');
 db.loadDatabase();
 
-function runTimer(interaction, seconds, minutes) {
+function runTimer(user, channel, seconds, minutes) {
 	var timeinMilliseconds = (seconds * 1000) + (minutes * 60000)
 	var ringDate = new Date().getTime() + timeinMilliseconds
 		
 	var checkingInterval = setInterval(() => {
 		if(new Date().getTime() >= ringDate) {
 			if(minutes == 0 && seconds != 0) {
-				interaction.followUp(`**<@${interaction.user.id}> Your timer for ${seconds} seconds has finished!**`)
+				channel.send(`**<@${user.id}> Your timer for ${seconds} seconds has finished!**`)
 				clearInterval(checkingInterval)
 			}
 
 			if(seconds == 0 && minutes != 0) {
-				interaction.followUp(`**<@${interaction.user.id}> Your timer for ${minutes} minutes has finished!**`)
+				channel.send(`**<@${user.id}> Your timer for ${minutes} minutes has finished!**`)
 				clearInterval(checkingInterval)
 			}
 
 			if(seconds != 0 && minutes != 0) {
-				interaction.followUp(`**<@${interaction.user.id}> Your timer for ${minutes} minutes and ${seconds} seconds has finished!**`)
+				channel.send(`**<@${user.id}> Your timer for ${minutes} minutes and ${seconds} seconds has finished!**`)
 				clearInterval(checkingInterval)
 			}
 		}
@@ -105,7 +105,7 @@ module.exports = {
 						var response = "**Current Presets**\n\n"
 						
 						for(var i = 0; i < user.data.length; i++) {
-							response += `**- ${user.data[i].tag}: ${Math.floor(user.data[i].timer / 60000)} minutes and ${((user.data[i].timer % 60000) / 1000).toFixed(0)} seconds**\n`
+							response += `**- ${user.data[i].tag}: ${user.data[i].minutes} minutes and ${user.data[i].seconds} seconds**\n`
 						}
 
 						interaction.reply(response)
@@ -115,29 +115,27 @@ module.exports = {
 			
 			//Create
 			if(interaction.options.getSubcommand() == "create") {
-				var timeinMilliseconds = (interaction.options.getNumber('seconds') * 1000) + (interaction.options.getNumber('minutes') * 60000)
-				if(timeinMilliseconds != 0) {
-					
-				if (db.getCollection(interaction.user.id) == null) {
+				if(interaction.options.getNumber('minutes') == 0 && interaction.options.getNumber('seconds') == 0) {
+					interaction.reply(`**Your preset must have a time!**`);
+				}else{
+					if (db.getCollection(interaction.user.id) == null) {
 					user = db.addCollection(interaction.user.id);
 
 					//No need to check if they have the preset already since they aren't even in the database
-					user.insert({ tag: interaction.options.getString('tag'), timer: timeinMilliseconds});
+					user.insert({ tag: interaction.options.getString('tag'), minutes: interaction.options.getNumber('minutes'), seconds: interaction.options.getNumber('seconds')});
 					db.saveDatabase();
 					interaction.reply(`**Successfully created a preset timer with the tag "${interaction.options.getString('tag')}"**`)
 				}else{
 					user = db.getCollection(interaction.user.id)
 
 					if(user.find({ tag: interaction.options.getString('tag') }).length == 0) {
-						user.insert({ tag: interaction.options.getString('tag'), timer: timeinMilliseconds});
+						user.insert({ tag: interaction.options.getString('tag'), minutes: interaction.options.getNumber('minutes'), seconds: interaction.options.getNumber('seconds')});
 					db.saveDatabase();
 					interaction.reply(`**Successfully created a preset timer with the tag "${interaction.options.getString('tag')}"**`)
 					}else{
 						interaction.reply(`**You already have a preset timer with the same name**`)
 					}
 				}
-				}else{
-					interaction.reply(`**Your preset must have a time!**`);
 				}
 			}
 
@@ -168,9 +166,9 @@ module.exports = {
 					user = db.getCollection(interaction.user.id)
 
 					if(user.find({ tag: interaction.options.getString('tag') }).length != 0) {
-						runTimer(interaction, ((user.find({ tag: interaction.options.getString('tag') })[0].timer % 60000) / 1000).toFixed(0), Math.floor(user.find({ tag: interaction.options.getString('tag') })[0].timer / 60000))
+						runTimer(interaction.user, interaction.channel, user.find({ tag: interaction.options.getString('tag') })[0].seconds, user.find({ tag: interaction.options.getString('tag') })[0].minutes)
 
-						interaction.reply(`**Your timer for ${Math.floor(user.find({ tag: interaction.options.getString('tag') })[0].timer / 60000)} minutes and ${((user.find({ tag: interaction.options.getString('tag') })[0].timer % 60000) / 1000).toFixed(0)} seconds has started. You will be notified once your timer ends.**`);
+						interaction.reply(`**Your timer for ${user.find({ tag: interaction.options.getString('tag') })[0].minutes} minutes and ${interaction.channel, user.find({ tag: interaction.options.getString('tag') })[0].seconds} seconds has started. You will be notified once your timer ends.**`);
 					}else{
 						interaction.reply(`**You don't have a preset with that name!**`)
 					}

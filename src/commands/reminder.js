@@ -1,12 +1,12 @@
 const { SlashCommandBuilder } = require("discord.js");
 
-function runTimer(interaction, seconds, minutes, reminder) {
+function runTimer(user, channel, seconds, minutes, reminder) {
 	var timeinMilliseconds = (seconds * 1000) + (minutes * 60000)
 	var ringDate = new Date().getTime() + timeinMilliseconds
 		
 	var checkingInterval = setInterval(() => {
 		if(new Date().getTime() >= ringDate) {
-			interaction.followUp(`**<@${interaction.user.id}> You have a new reminder: ${reminder}**`)
+			channel.send(`**<@${user.id}> You have a new reminder: ${reminder}**`)
 			clearInterval(checkingInterval)
 		}
 	}, 100);
@@ -34,7 +34,7 @@ module.exports = {
 			}else{
 				interaction.reply(`**Your reminder for "${interaction.options.getString('reminder')}" has started. You will be notified once your timer ends.**`);
 
-				runTimer(interaction, Number(interaction.options.getNumber('seconds')), Number(interaction.options.getNumber('minutes')), interaction.options.getString('reminder'))
+				runTimer(interaction.user, interaction.channel, Number(interaction.options.getNumber('seconds')), Number(interaction.options.getNumber('minutes')), interaction.options.getString('reminder'))
 			}
     }
  };
