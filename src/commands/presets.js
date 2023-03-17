@@ -3,24 +3,34 @@ const loki = require('lokijs');
 var db = new loki('presets.db');
 db.loadDatabase();
 
-function runTimer(user, channel, seconds, minutes) {
+function runTimer(user, channel, seconds, minutes, ping) {
 	var timeinMilliseconds = (seconds * 1000) + (minutes * 60000)
 	var ringDate = new Date().getTime() + timeinMilliseconds
+
+	if(ping == null) {
+		ping = "None"
+	}
 		
 	var checkingInterval = setInterval(() => {
 		if(new Date().getTime() >= ringDate) {
 			if(minutes == 0 && seconds != 0) {
-				channel.send(`**<@${user.id}> Your timer for ${seconds} seconds has finished!**`)
+				channel.send(`**<@${user.id}> Your timer for ${seconds} seconds has finished!**
+
+**Ping: ||${ping}||**`)
 				clearInterval(checkingInterval)
 			}
 
 			if(seconds == 0 && minutes != 0) {
-				channel.send(`**<@${user.id}> Your timer for ${minutes} minutes has finished!**`)
+				channel.send(`**<@${user.id}> Your timer for ${minutes} minutes has finished!**
+
+**Ping: ||${ping}||**`)
 				clearInterval(checkingInterval)
 			}
 
 			if(seconds != 0 && minutes != 0) {
-				channel.send(`**<@${user.id}> Your timer for ${minutes} minutes and ${seconds} seconds has finished!**`)
+				channel.send(`**<@${user.id}> Your timer for ${minutes} minutes and ${seconds} seconds has finished!**
+
+**Ping: ||${ping}||**`)
 				clearInterval(checkingInterval)
 			}
 		}
@@ -82,6 +92,11 @@ module.exports = {
 				.setName('tag')
 				.setDescription('Your preset timers tag/name')
 				.setRequired(true)
+			))
+			.addStringOption((option => option
+				.setName('ping')
+				.setDescription("The person, or role, that will be pinged. If you leave this blank, only you will be pinged.")
+				.setRequired(false)
 			)))),
     run: async (client, interaction) => {
 			
@@ -166,7 +181,7 @@ module.exports = {
 					user = db.getCollection(interaction.user.id)
 
 					if(user.find({ tag: interaction.options.getString('tag') }).length != 0) {
-						runTimer(interaction.user, interaction.channel, user.find({ tag: interaction.options.getString('tag') })[0].seconds, user.find({ tag: interaction.options.getString('tag') })[0].minutes)
+						runTimer(interaction.user, interaction.channel, user.find({ tag: interaction.options.getString('tag') })[0].seconds, user.find({ tag: interaction.options.getString('tag') })[0].minutes, interaction.options.getString('ping'))
 
 						interaction.reply(`**Your timer for ${user.find({ tag: interaction.options.getString('tag') })[0].minutes} minutes and ${interaction.channel, user.find({ tag: interaction.options.getString('tag') })[0].seconds} seconds has started. You will be notified once your timer ends.**`);
 					}else{
