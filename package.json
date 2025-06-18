@@ -1,0 +1,35 @@
+{
+  "name": "timerbot",
+  "version": "3.0.0",
+  "description": "A powerful time-based bot allowing you to create detailed timers, alarms, and reminders in your Discord server effortlessly.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrianWalczak/TimerBot.git"
+  },
+  "keywords": [
+    "discord",
+    "discordjs",
+    "bot",
+    "discord bot",
+    "timer",
+    "reminder",
+    "utilities"
+  ],
+  "author": "Brian Walczak",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/BrianWalczak/TimerBot/issues"
+  },
+  "homepage": "https://github.com/BrianWalczak/TimerBot#readme",
+  "dependencies": {
+    "@discordjs/rest": "^2.5.0",
+    "chalk": "^4.1.2",
+    "discord-api-types": "^0.38.11",
+    "discord.js": "^14.19.3",
+    "express": "^5.1.0",
+    "lokijs": "^1.5.12",
+    "luxon": "^3.6.1",
+    "ulid": "^3.0.1"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "token": "DISCORD_BOT_TOKEN",
+  "paypal": {
+    "enabled": true,
+    "apiUrl": "https://api-m.paypal.com",
+    "clientId": "",
+    "clientSecret": "",
+    "reference": "timerbot_tip",
+    "accessToken": null
+  }
+}

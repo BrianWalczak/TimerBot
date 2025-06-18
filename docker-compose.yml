@@ -1,0 +1,11 @@
+services:
+  app:
+    image: timerbot
+    container_name: timerbot
+    ports:
+      - "3000:7000"
+    volumes:
+      - ./data:/usr/src/app/data
+    environment:
+      FILES_LOCATION: /usr/src/app/data
+    restart: unless-stopped
