@@ -103,6 +103,7 @@ async function deliverOrder(res, sendDM = false) {
         if(main) {
             main.send({
                 type: 'user',
+                method: 'api',
                 id: userId,
                 content: 'Hey! Just wanted to stop by and leave this letter here. 😃',
                 embeds: [embed.toJSON()]

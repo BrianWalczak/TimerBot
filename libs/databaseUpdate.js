@@ -30,10 +30,10 @@ async function startDatabase(manager) {
                 embed.addFields({ name: "📜 Description", value: event.desc || "No description provided.", inline: false });
             }
 
-            const main = manager.shards.get(0);
-            if(main) {
-                main.send({
+            for (const shard of manager.shards.values()) {
+                shard.send({
                     type: 'channel',
+                    method: 'cache',
                     id: event.channelId,
                     content: `||${ping}||`,
                     embeds: [embed.toJSON()]

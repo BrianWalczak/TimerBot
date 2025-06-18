@@ -6,12 +6,13 @@ module.exports = {
   async execute(client) {
     process.on('message', async (msg) => {
         const type = msg.type;
+        const method = msg.method;
         let messenger;
 
         if(type === 'channel') {
-            messenger = await client.channels.fetch(msg.id).catch(() => null);
+            messenger = method === 'cache' ? client.channels.cache.get(msg.id) : await client.channels.fetch(msg.id).catch(() => null);
         } else if(type === 'user') {
-            messenger = await client.users.fetch(msg.id).catch(() => null);
+            messenger = method === 'cache' ? client.users.cache.get(msg.id) : await client.users.fetch(msg.id).catch(() => null);
         } else {
             return;
         }
