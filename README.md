@@ -59,7 +59,7 @@ services:
     image: timerbot
     container_name: timerbot
     ports:
-      - "3000:7000" # Exposes port 7000 from the container to port 3000 on your host (change 3000 if needed)
+      - "8080:8080" # Exposes port 8080 from the container to port 8080 on your host (change if needed)
     volumes:
       - ./data:/usr/src/app/data # Replace './data' with the path to your local config.json and database files
     environment:

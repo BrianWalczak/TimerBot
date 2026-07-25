@@ -4,7 +4,7 @@ services:
     image: timerbot
     container_name: timerbot
     ports:
-      - "3000:7000"
+      - "8080:8080"
     volumes:
       - ./data:/usr/src/app/data
     environment:

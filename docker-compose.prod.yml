@@ -3,10 +3,9 @@ services:
     build: .
     image: timerbot
     ports:
-      - "7000:7000"
+      - "8080"
     volumes:
       - /data/storage/timerbot:/usr/src/app/data
-    environment:
-      CONFIG_FILE: /usr/src/app/data/config.json
-      DATABASE_URL: file:/usr/src/app/data/data.db
-    restart: unless-stopped
+    env_file:
+      - .env
+    restart: always

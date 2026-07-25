@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require("path");
 
 const configPath = process.env.CONFIG_FILE ? process.env.CONFIG_FILE : path.join(__dirname, "../config.json");
+const PORT = 8080;
 let manager;
 let config;
 
@@ -248,8 +249,8 @@ function spawnWebhook(lManager) {
         return res.sendStatus(200);
     });
 
-    webhook.listen(7000);
-    console.log(`${chalk.blue('[PAYPAL]')} Webhook server is running on port 7000.`);
+    webhook.listen(PORT);
+    console.log(`${chalk.blue('[PAYPAL]')} Webhook server is running on port ${PORT}.`);
 }
 
 module.exports = { isEnabled, createOrder, validateOrder, spawnWebhook };
