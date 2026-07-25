@@ -49,7 +49,7 @@ readdirSync('./src/events').forEach(file => {
 	}
 });
 
-client.once("ready", async () => {
+client.once("clientReady", async () => {
 	try {
 		const shardId = client.shard?.ids?.[0] ?? 0;
 		
